@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   styled,
   ContainerProps,
   TextField,
   ButtonGroup,
+  Box,
 } from "@mui/material";
 import {
   FormWrapper,
@@ -20,7 +21,7 @@ import GoIcon from "../asset/image/Google.svg";
 import Button from "../Components/Common/Button/Button";
 import SignupImg from "../Components/Common/Images";
 import signupimg from "../asset/image/Signup.svg";
-import { Padding } from "@mui/icons-material";
+import { useAuth } from "../Context/AuthContext";
 type Props = {};
 
 const useStyles = makeStyles()({
@@ -46,7 +47,18 @@ export const Wrapper = styled(Container)<ContainerProps>(({ theme }) => ({
 }));
 
 const Signup = (props: Props) => {
+  const { signinGoogle, signinGithub, signup, user } = useAuth();
+  const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [password, setPassword] = useState("");
+  const [tel, setTel] = useState("");
   const { classes } = useStyles();
+
+  function handleSignInWithEmail() {
+    signup(firstName, lastName, email, password, tel);
+  }
+
   return (
     <Wrapper>
       <SignupImg img={signupimg} />
@@ -58,12 +70,16 @@ const Signup = (props: Props) => {
             required
             label="First Name"
             variant="outlined"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
           />
           <TextField
             className={classes.inputStyles}
             required
             label="Last Name"
             variant="outlined"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
           />
           <TextField
             className={classes.inputStyles}
@@ -71,6 +87,8 @@ const Signup = (props: Props) => {
             label="Phone Number"
             variant="outlined"
             type="tel"
+            value={tel}
+            onChange={(e) => setTel(e.target.value)}
           />
           <TextField
             className={classes.inputStyles}
@@ -78,6 +96,8 @@ const Signup = (props: Props) => {
             label="E-mail"
             variant="outlined"
             type={"email"}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <TextField
             className={classes.inputStyles}
@@ -85,16 +105,24 @@ const Signup = (props: Props) => {
             label="Password"
             variant="outlined"
             type={"password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
-          <Button>Create Account</Button>
+          <Button>
+            <Box onClick={() => handleSignInWithEmail()}>Create Account</Box>
+          </Button>
         </Form>
         <Seperator />
         <ButtonGroup className={classes.btnGrup}>
           <Button icon={<Image src={fbIcon} width={20} height={20} />}>
-            FaceBook
+            <Box width="100%" height="100%" onClick={() => signinGithub()}>
+              Github
+            </Box>
           </Button>
           <Button icon={<Image src={GoIcon} width={20} height={20} />}>
-            Google
+            <Box width="100%" height="100%" onClick={() => signinGoogle()}>
+              Google
+            </Box>
           </Button>
         </ButtonGroup>
         <AdditionalInfo />
