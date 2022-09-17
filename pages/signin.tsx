@@ -11,22 +11,9 @@ import {
 } from "../Components/Common";
 import { makeStyles } from "tss-react/mui";
 import signupImg from "../asset/image/Signin.png";
-import {
-  useSession,
-  signIn,
-  signOut,
-  getSession,
-  getProviders,
-  getCsrfToken,
-} from "next-auth/react";
-import { ProviderType } from "next-auth/providers";
-import { CtxOrReq } from "next-auth/client/_utils";
-import { NextPageContext } from "next";
+import { useAuth } from "../Context/AuthContext";
 
-type Props = {
-  providers: ProviderType;
-  csrfToken: any;
-};
+type Props = {};
 
 const useStyles = makeStyles()({
   btnGrup: {
@@ -36,41 +23,45 @@ const useStyles = makeStyles()({
   inputStyles: { marginBlock: "1rem", minWidth: "100%" },
 });
 
-const Signin = ({ providers, csrfToken }: Props) => {
+const Signin = () => {
   const { classes } = useStyles();
-  const { data } = useSession();
-  console.log(data);
+  const [email, setEmail] = React.useState<string>("");
+  const { signinGithub, signinGoogle, signin, user } = useAuth();
+  console.log(user);
+
   return (
     <Wrapper>
       <Image img={signupImg} />
       <FormWrapper as="div">
-        <Title>Join the fastest growing community now!</Title>
-        <Form>
-          <form action="/api/auth/signin/email" method="post">
-            <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
-            <TextField
-              className={classes.inputStyles}
-              label="Email"
-              variant="outlined"
-              name="email"
-            />
-            <Button type="submit">
-              <Box> Log in </Box>
-            </Button>
-          </form>
+        <Title>Welcome back</Title>
+        <Form as="form">
+          <TextField
+            className={classes.inputStyles}
+            label="Email"
+            variant="outlined"
+            name="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <TextField
+            className={classes.inputStyles}
+            label="Password"
+            variant="outlined"
+            name="password"
+          />
           <Button>
-            <Box onClick={() => signOut()}> Log out </Box>
+            <Box> Log in </Box>
           </Button>
         </Form>
         <Seperator />
         <ButtonGroup className={classes.btnGrup}>
           <Button>
-            <Box width="100%" height="100%" onClick={() => signIn("github")}>
+            <Box width="100%" height="100%" onClick={() => signinGithub()}>
               Github
             </Box>
           </Button>
           <Button>
-            <Box width="100%" height="100%" onClick={() => signIn("google")}>
+            <Box width="100%" height="100%" onClick={() => signinGoogle()}>
               Google
             </Box>
           </Button>
@@ -78,24 +69,6 @@ const Signin = ({ providers, csrfToken }: Props) => {
       </FormWrapper>
     </Wrapper>
   );
-};
-
-Signin.getInitialProps = async (context: NextPageContext) => {
-  const { req, res } = context;
-  const session = await getSession({ req });
-
-  if (session && res && session) {
-    res.writeHead(302, {
-      location: "/dashbord",
-    });
-    res.end();
-    return;
-  }
-  return {
-    session: undefined,
-    providers: await getProviders(),
-    csrfToken: await getCsrfToken(context),
-  };
 };
 
 export default Signin;
