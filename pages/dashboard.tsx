@@ -2,17 +2,20 @@ import React from "react";
 import { useAuth } from "../Context/AuthContext";
 import PP from "../Components/Protected/PP";
 import { SidePane } from "../Components/Dashbord";
+import { useGetUserData } from "../hooks/useGetUserData";
+
 type Props = {};
 
-const Dashboard = (props: Props) => {
+const Dashboard = () => {
   const { user } = useAuth();
-  console.log(user);
+  useGetUserData(user?.email!);
   return (
     <PP>
-      <div>
-        <SidePane />
-        <button>sign out</button>
-      </div>
+      <SidePane>
+        <div>
+          <button>sign out</button>
+        </div>
+      </SidePane>
     </PP>
   );
 };

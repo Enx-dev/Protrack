@@ -3,8 +3,8 @@ import { SidePane } from "../Components/Dashbord";
 
 type Props = {};
 
-const tasks = (props: Props) => {
-  return <SidePane>tasks</SidePane>;
+const project = (props: Props) => {
+  return <SidePane>project</SidePane>;
 };
 
-export default tasks;
+export default project;

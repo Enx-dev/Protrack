@@ -17,6 +17,10 @@ import {
 import { auth, DB } from "../Firebase/config";
 import { useRouter } from "next/router";
 import { setDoc, doc } from "firebase/firestore";
+import db from "../utils/db";
+import { TeamModel, UserModel } from "../Models/userModel";
+import axios from "axios";
+
 type Props = {
   children: React.ReactNode;
 };
@@ -37,6 +41,7 @@ type IAUth = {
   isLoading: boolean;
   isAuthenticated: boolean;
   error: boolean;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
 };
 
 const AuthContext = createContext<IAUth>({
@@ -49,6 +54,7 @@ const AuthContext = createContext<IAUth>({
   isLoading: false,
   isAuthenticated: false,
   error: false,
+  setUser: () => null,
 });
 
 const AuthProvider = ({ children }: Props) => {
@@ -82,40 +88,41 @@ const AuthProvider = ({ children }: Props) => {
     tel: string
   ) => {
     setLoading(true);
+    db.connect();
     await createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         const user = userCredential.user;
         setUser(user);
         setIsAuthenticated(true);
-      })
-      .then(() => {
-        setDoc(doc(DB, "users", email), {
+        let newUser = {
           name: {
-            firstname,
-            lastname,
+            firstName: firstname,
+            lastName: lastname,
           },
-          uid: user?.uid,
           email,
           tel,
-          img: "",
           country: "",
           teams: [],
-          projects: [],
-        })
-          .then(() => {
-            push("/dashboard");
-          })
-          .catch((err) => {
-            console.log(err.message);
-          });
+        };
+        UserModel.insertMany(newUser, (err, results) => {
+          if (!err) {
+            console.log(results);
+            return;
+          }
+          console.log(err);
+        });
       })
+      .then(() => {
+        db.disconect();
+        push("/dashboard");
+      })
+
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         setError(true);
         console.log(errorMessage);
       })
-
       .finally(() => {
         setLoading(false);
       });
@@ -123,7 +130,7 @@ const AuthProvider = ({ children }: Props) => {
   const signin = async (email: string, password: string) => {
     setLoading(true);
     await signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         const user = userCredential.user;
         setUser(user);
         setIsAuthenticated(true);
@@ -133,6 +140,7 @@ const AuthProvider = ({ children }: Props) => {
       })
       .catch((err) => {
         setError(false);
+        console.log(err.message);
       })
       .finally(() => {
         setLoading(false);
@@ -143,7 +151,7 @@ const AuthProvider = ({ children }: Props) => {
     const provider = new GithubAuthProvider();
     setLoading(true);
     await signInWithPopup(auth, provider)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         const user = userCredential.user;
         setUser(user);
         setIsAuthenticated(true);
@@ -153,6 +161,7 @@ const AuthProvider = ({ children }: Props) => {
       })
       .catch((err) => {
         setError(true);
+        console.log(err.message);
       })
       .finally(() => {
         setLoading(false);
@@ -162,7 +171,7 @@ const AuthProvider = ({ children }: Props) => {
     const provider = new GoogleAuthProvider();
     setLoading(true);
     await signInWithPopup(auth, provider)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         const user = userCredential.user;
         setUser(user);
         setIsAuthenticated(true);
@@ -179,7 +188,7 @@ const AuthProvider = ({ children }: Props) => {
   };
   const signout = async () => {
     await signOut(auth)
-      .then(() => {
+      .then(async () => {
         setUser(null);
         setIsAuthenticated(false);
       })
@@ -201,6 +210,7 @@ const AuthProvider = ({ children }: Props) => {
       signinGithub,
       signinGoogle,
       signout,
+      setUser,
     };
   }, [user, error, isAuthenticated, isLoading]);
   return (

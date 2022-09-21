@@ -21,7 +21,8 @@
     "**/*.ts",
     "**/*.tsx",
     "pages/*.tsx",
-    "App/database/Config/index.js"
+    "App/database/Config/index.js",
+    "hooks/useGetUserData.js"
   ],
   "exclude": ["node_modules"]
 }

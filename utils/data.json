@@ -1,0 +1,36 @@
+{
+    "users":[
+        {
+            "_id": 0,
+             "name":{
+                "firstName":"Eniola",
+                "lastName":"Adejori"
+             },
+             "email":"ade@gmail.com",
+             "tel":"",
+             "country":"",
+             "teams":[0]
+        }
+    ],
+    "teams":[
+                {
+                    "_id": 0,
+                    "members":[0],
+                    "creator":0,
+                    "projects":[
+                        {
+                            "name":"",
+                            "tasks":[
+                                {
+                                    "name":"",
+                                    "statues":"",
+                                    "assignedto":"",
+                                    "dateCreated":""
+                                }
+                            ]
+                        }
+                    ],
+                    "dateFormed":""
+                }
+             ]
+}

@@ -53,10 +53,10 @@ const CreateSection = (props: Props) => {
   return (
     <Wrapper>
       <Container className={classes.wrapper}>
-        <Box className={classes.Img}>
+        <Box id="share" className={classes.Img}>
           <Image src={shareImg} layout="responsive" />
         </Box>
-        <Box className={classes.textContent}>
+        <Box id="shareItem" className={classes.textContent}>
           <Typography className={classes.heading} variant="h1">
             <mark>Share</mark> and <mark>communicate</mark> with your
             <mark> team </mark>

@@ -32,8 +32,8 @@ const features = [
 const Features = (props: Props) => {
   const { classes } = styles();
   return (
-    <Wrapper>
-      <Typography variant="h1" className={classes.heading}>
+    <Wrapper id="features">
+      <Typography id="featuresHead" variant="h1" className={classes.heading}>
         Why ProTrack?
       </Typography>
       <Container className={classes.wrapper}>
@@ -45,7 +45,11 @@ const Features = (props: Props) => {
           container
           spacing="1.5rem">
           {features.map((items) => (
-            <Grid key={items._id} item className={classes.gridItem}>
+            <Grid
+              id="featuresItem"
+              key={items._id}
+              item
+              className={classes.gridItem}>
               <Typography variant="h2">{items.name}</Typography>
               <Typography className={classes.body1} variant="body1">
                 {items.desc}

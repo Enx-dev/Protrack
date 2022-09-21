@@ -46,6 +46,7 @@ const heroStyles = makeStyles()((theme) => ({
   },
   heroImg: {
     width: "100%",
+    display: "grid",
     [theme.breakpoints.up("md")]: {
       width: "60%",
     },

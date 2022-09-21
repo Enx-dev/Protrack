@@ -52,11 +52,11 @@ const CreateSection = (props: Props) => {
   const { classes } = styles();
   return (
     <Wrapper>
-      <Container className={classes.wrapper}>
+      <Container id="share" className={classes.wrapper}>
         <Box className={classes.Img}>
           <Image src={createImg} layout="responsive" />
         </Box>
-        <Box className={classes.textContent}>
+        <Box id="shareItem" className={classes.textContent}>
           <Typography className={classes.heading} variant="h1">
             <mark>Create</mark> task and <mark>collaborate</mark> with your
             <mark> team </mark>

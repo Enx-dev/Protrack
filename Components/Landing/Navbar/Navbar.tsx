@@ -52,7 +52,11 @@ const Navbar = (props: Props) => {
             onClick={() => setToggle(true)}>
             <MenuIcon />
           </IconButton>
-          <Drawer anchor="right" open={toggle}>
+          <Drawer
+            variant="temporary"
+            anchor="right"
+            onClose={() => setToggle(false)}
+            open={toggle}>
             <SideBar toggler={setToggle} />
           </Drawer>
           <Box
@@ -71,10 +75,8 @@ const Navbar = (props: Props) => {
               alignItems: "center",
               gap: "5px",
             }}>
-            <Button variant="outlined">
-              <Box width="100%" height="100%" onClick={() => push("/signin")}>
-                Login
-              </Box>
+            <Button onClick={() => push("/signin")} variant="outlined">
+              Login
             </Button>
             <Button variant="contained" color="primary">
               Get Protrack for free
@@ -90,58 +92,66 @@ type SidebarProps = {
   toggler: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const SideBar = ({ toggler }: SidebarProps) => (
-  <Box
-    sx={{
-      paddingBlock: "3rem",
-      paddingInline: "2rem",
-      width: "70vw",
-      maxWidth: "400px",
-      position: "relative",
-      display: ["block", "block", "none"],
-    }}>
-    <IconButton
-      sx={{ position: "absolute", top: "10px", right: "0" }}
-      onClick={() => toggler(false)}>
-      <CloseIcon />
-    </IconButton>
+const SideBar = ({ toggler }: SidebarProps) => {
+  const { push } = useRouter();
+  return (
     <Box
       sx={{
-        display: "flex",
+        paddingBlockStart: "7rem",
+        paddingBlockEnd: "3rem",
+        paddingInline: "2rem",
+        width: "70vw",
+        maxWidth: "400px",
+        position: "relative",
+        display: ["flex", "flex", "none"],
         flexDirection: "column",
-        gap: "1rem",
+        justifyContent: "space-between",
+        height: "100%",
       }}>
-      {links.map((link) => (
-        <Button sx={{ fontSize: "1.5rem" }} key={link}>
-          {link}
-        </Button>
-      ))}
-    </Box>
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: "10px",
-        marginBlockStart: "4rem",
-      }}>
-      <Button
+      <IconButton
+        sx={{ position: "absolute", top: "10px", right: "0" }}
+        onClick={() => toggler(false)}>
+        <CloseIcon />
+      </IconButton>
+      <Box
         sx={{
-          alignSelf: "stretch",
-          paddingBlock: "0.5rem",
-          transition: "all 0.3s ease-in",
-          ":hover": { backgroundColor: "primary.main", color: "white" },
-        }}
-        variant="outlined">
-        Login
-      </Button>
-      <Button
-        sx={{ alignSelf: "stretch", paddingBlock: "0.5rem" }}
-        variant="contained"
-        color="primary">
-        Get Protrack for free
-      </Button>
+          display: "flex",
+          flexDirection: "column",
+          gap: "1rem",
+        }}>
+        {links.map((link) => (
+          <Button sx={{ fontSize: "1.5rem" }} key={link}>
+            {link}
+          </Button>
+        ))}
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "10px",
+          marginBlockStart: "4rem",
+        }}>
+        <Button
+          sx={{
+            alignSelf: "stretch",
+            paddingBlock: "0.5rem",
+            transition: "all 0.3s ease-in",
+            ":hover": { backgroundColor: "primary.main", color: "white" },
+          }}
+          variant="outlined"
+          onClick={() => push("/signin")}>
+          Login
+        </Button>
+        <Button
+          sx={{ alignSelf: "stretch", paddingBlock: "0.5rem" }}
+          variant="contained"
+          color="primary">
+          Get Protrack for free
+        </Button>
+      </Box>
     </Box>
-  </Box>
-);
+  );
+};
 export default Navbar;
